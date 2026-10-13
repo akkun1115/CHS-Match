@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: "If you use CHS-Match or the released benchmark, please cite the CHS-Match paper."
+message: "If you use the CHS-Match software or its benchmark-construction procedure, please cite the CHS-Match paper."
 title: "CHS-Match: Coupled Representation Learning for Heterogeneous Subgraph Matching"
 type: software
 authors:
