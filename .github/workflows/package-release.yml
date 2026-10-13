@@ -1,0 +1,73 @@
+name: Package clean release source
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Verify release contains source only
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import subprocess
+          from pathlib import PurePosixPath
+
+          paths = subprocess.check_output(
+              ["git", "ls-files", "-z"], encoding="utf-8"
+          ).split("\0")
+          names = {p for p in paths if p}
+          required = {
+              "README.md", "LICENSE", "CITATION.cff", ".gitignore",
+              "chs_match/model.py", "chs_match/train.py", "chs_match/data.py",
+              "scripts/build_benchmark.sh",
+              "preprocess/01_prepare_source_graphs.py",
+              "preprocess/02_search_node_disjoint_partition.py",
+              "preprocess/03_generate_node_disjoint_pairs.py",
+              "preprocess/04_build_multi_positive_ground_truth.py",
+          }
+          assert required.issubset(names), sorted(required - names)
+          forbidden_suffixes = (".pt", ".pth", ".ckpt", ".npy", ".npz", ".zip", ".tar", ".gz")
+          for p in names:
+              assert not p.endswith(forbidden_suffixes), f"Non-source file in release: {p}"
+              assert not p.startswith(("raw/", "data/", "build/", "results/")), p
+          print(f"Validated {len(names)} tracked source and documentation files.")
+          PY
+
+      - name: Create Git-history-free source archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git archive --format=zip --output=CHS-Match-clean-source.zip HEAD
+          python - <<'PY'
+          from zipfile import ZipFile
+
+          with ZipFile("CHS-Match-clean-source.zip") as package:
+              names = package.namelist()
+              assert "README.md" in names
+              assert "chs_match/model.py" in names
+              assert "scripts/build_benchmark.sh" in names
+              assert not any(
+                  p.startswith(".git/") or p.endswith((".pt", ".pth", ".ckpt"))
+                  for p in names
+              )
+              print(f"Archive contains {len(names)} entries and no Git history.")
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CHS-Match-clean-source
+          path: CHS-Match-clean-source.zip
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,25 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+venv/
+.env
+runs/
+log/
+results/
+*.ckpt
+*.pth
+# All generated benchmark files must remain local; source licenses may restrict redistribution.
+benchmark/*.pt
+benchmark/*.csv
+benchmark/*.json
+benchmark/*_summary.txt
+benchmark/*_pair_details.txt
+benchmark/*.partial.pt
+benchmark/2hop/
+benchmark/3hop/
+# Local benchmark-construction workspace.
+raw/
+data/
+build/
+

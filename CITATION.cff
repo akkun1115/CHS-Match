@@ -1,0 +1,12 @@
+cff-version: 1.2.0
+message: "If you use CHS-Match or the released benchmark, please cite the CHS-Match paper."
+title: "CHS-Match: Coupled Representation Learning for Heterogeneous Subgraph Matching"
+type: software
+authors:
+  - family-names: Goto
+    given-names: Akitomo
+  - family-names: Amagasaki
+    given-names: Motoki
+  - family-names: Kiyama
+    given-names: Masato
+repository-code: "https://github.com/akkun1115/CHS-Match"
