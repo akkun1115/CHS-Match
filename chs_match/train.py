@@ -1,4 +1,4 @@
-"""Training/evaluation entry point for the released CHS-Match model.
+"""Training/evaluation entry point for the CHS-Match model.
 
 The CLI exposes only settings needed to reproduce analyses reported in the
 paper: dataset/seed, layer depth and hop size, lambda_mm, Sinkhorn iterations,
@@ -51,7 +51,7 @@ DEFAULT_LAYERS = {
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description="Train/evaluate CHS-Match on the released benchmark."
+        description="Train/evaluate CHS-Match on locally generated benchmark files."
     )
     parser.add_argument(
         "--dataset",
