@@ -2,7 +2,7 @@
 
 For each query-target pair, this script expands the generation-time mapping to
 the set of admissible node-level correspondences under the benchmark matching
-semantics. The output keeps the released benchmark tuple format.
+semantics. The output keeps the CHS-Match benchmark tuple format.
 """
 from __future__ import annotations
 
